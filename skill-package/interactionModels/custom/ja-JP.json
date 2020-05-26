@@ -1,0 +1,47 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "トリップトリップ",
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
+        {
+          "name": "DestinationCityIntent",
+          "samples": [
+            "{city} に連れてって",
+            "{city} に行きたい"
+          ],
+          "slots": [
+            {
+              "name": "city",
+              "type": "AMAZON.City"
+            }
+          ]
+        },
+        {
+          "name": "DestinationCountryIntent",
+          "samples": [
+            "{country} に連れてって",
+            "{country} に行きたい"
+          ],
+          "slots": [
+            {
+              "name": "country",
+              "type": "AMAZON.Country"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

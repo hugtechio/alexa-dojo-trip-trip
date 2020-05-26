@@ -1,0 +1,32 @@
+{
+  "manifest": {
+    "publishingInformation": {
+      "locales": {
+        "ja-JP": {
+          "summary": "旅行に言った気になれるかもしれないスキルです",
+          "examplePhrases": [
+            "アレクサ、トリップトリップを開いて",
+            "アレクサ、トリップトリップでオランダに行きたい",
+            "アレクサ、トリップトリップ"
+          ],
+          "keywords": [
+            "旅行",
+            "妄想",
+            "海外"
+          ],
+          "name": "トリップトリップ",
+          "description": "アレクサに聞いた場所の音を流します。そこに言った気分になれる。。。かもしれません。"
+        }
+      },
+      "category": "HEALTH_AND_FITNESS"
+    },
+    "apis": {
+      "custom": {
+        "endpoint": {
+          "uri": "arn:aws:lambda:us-east-1:623357820778:function:ask-skill-triptrip-default-skil-AlexaSkillFunction-1VAFV5XXN6PNR"
+        }
+      }
+    },
+    "manifestVersion": "1.0"
+  }
+}

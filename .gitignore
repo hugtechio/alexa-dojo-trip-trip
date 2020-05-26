@@ -1,0 +1,5 @@
+.DS_Store
+/lambda/custom/node_modules
+/lambda/custom/package-lock.json
+.ask
+node_modules
