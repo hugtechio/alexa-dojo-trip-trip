@@ -6,7 +6,11 @@ const storage = new S3PersistenceAdapter({ bucketName : 'alexa-skill-trip-trip' 
 const getFromWikipedia = require('./api')
 
 // persisted user context in S3
-let userContext = null
+let userContext = {
+  context: {
+    visit: 0
+  }
+} 
 
 // pre action before running handler
 const RequestInterceptor = {
@@ -19,11 +23,6 @@ const RequestInterceptor = {
       console.log(userContext)
     } catch(e) {
       console.log(e)
-      userContext = {
-        context: {
-          visit: 0
-        }
-      }
     }
   }
 }
@@ -80,6 +79,7 @@ const DestinationCityIntentHandler = {
     console.log(result)
 
     userContext.context.visit = userContext.context.visit + 1
+    userContext.context.date = Date.now()
     userContext.context.lastVisitCityDetail = result
     userContext.context.lastVisitCity = city
     await storage.saveAttributes(handlerInput.requestEnvelope, userContext)
