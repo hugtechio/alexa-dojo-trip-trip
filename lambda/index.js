@@ -6,11 +6,6 @@ const storage = new S3PersistenceAdapter({ bucketName : 'alexa-skill-trip-trip' 
 const getFromWikipedia = require('./api')
 
 // persisted user context in S3
-let userContext = {
-  context: {
-    visit: 0
-  }
-} 
 
 // pre action before running handler
 const RequestInterceptor = {
@@ -18,29 +13,11 @@ const RequestInterceptor = {
     console.log(handlerInput)
 
     // get memory from S3
-    try {
-      userContext = await storage.getAttributes(handlerInput.requestEnvelope)
-      console.log(userContext)
-    } catch(e) {
-      console.log(e)
-    }
   }
 }
 
-const greeting = (locale) => {
-
-}
-
 const welcome = () => {
-  const message = [
-    (times, param) => '妄想トリップへようこそ。このスキルを使うと、家に居ながらどこか違う町に旅行した気分になれるかも？あなたの今行ってみたい場所はどこですか？',
-    (times, param) => `おかえりなさい。今日は ${times} 回目の旅行ですね。前回 の ${param} への旅行はどうでしたか？ 今回はどこに行きましょうか？`,
-    (times, param) => `おかえりなさい。もう ${times} 回目の旅行になりました。前回は、${param} に行きましたね。今日はどちらに行きますか？`
-  ]
-
-  const context = userContext.context
-  const times = (context.visit >= 3) ? 3 : context.visit
-  return message[times](context.visit, context.lastVisitCity)
+  // スキルの起動回数によってメッセージを変えてみる。
 }
 
 
@@ -56,6 +33,7 @@ const LaunchRequestHandler = {
   },
   async handle(handlerInput) {
 
+    // Welcome メッセージ
     const message = decorate(welcome())
     return handlerInput.responseBuilder
       // .speak(message)
