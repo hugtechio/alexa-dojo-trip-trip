@@ -2,15 +2,17 @@ const SKILL_NAME = 'トリップトリップ'
 
 const Alexa = require('ask-sdk-core');
 const { S3PersistenceAdapter } = require('ask-sdk-s3-persistence-adapter');
-const storage = new S3PersistenceAdapter({ bucketName : 'alexa-skill-trip-trip' })
+const storage = new S3PersistenceAdapter({
+  bucketName: 'alexa-skill-trip-trip'
+})
 const getFromWikipedia = require('./api')
 
 // persisted user context in S3
-let userContext = {
-  context: {
-    visit: 0
-  }
-} 
+let userContext = 
+{
+  visit: 0,
+  lastVisitCity: ''
+}
 
 // pre action before running handler
 const RequestInterceptor = {
@@ -19,7 +21,10 @@ const RequestInterceptor = {
 
     // get memory from S3
     try {
-      userContext = await storage.getAttributes(handlerInput.requestEnvelope)
+      context = await storage.getAttributes(handlerInput.requestEnvelope)
+      if (Object.keys(context).length > 0) {
+        userContext = context
+      }
       console.log(userContext)
     } catch(e) {
       console.log(e)
@@ -38,15 +43,13 @@ const welcome = () => {
     (times, param) => `おかえりなさい。もう ${times} 回目の旅行になりました。前回は、${param} に行きましたね。今日はどちらに行きますか？`
   ]
 
-  const context = userContext.context
-  const times = (context.visit >= 3) ? 3 : context.visit
-  return message[times](context.visit, context.lastVisitCity)
+  const times = (userContext.visit >= 3) ? 2 : userContext.visit
+  return message[times](userContext.visit + 1, userContext.lastVisitCity)
 }
 
 
 const decorate = (message, context = null) => {
-  // not implement
-  return message
+  return message + `<break time="1s"/><amazon:effect name="whispered">エージャグに参加しませんか？</amazon:effect>`
 }
 
 const LaunchRequestHandler = {
@@ -78,15 +81,12 @@ const DestinationCityIntentHandler = {
     const result = await getFromWikipedia(city)
     console.log(result)
 
-    userContext.context.visit = userContext.context.visit + 1
-    userContext.context.date = Date.now()
-    userContext.context.lastVisitCityDetail = result
-    userContext.context.lastVisitCity = city
+    userContext.visit = userContext.visit + 1
+    userContext.date = Date.now()
+    userContext.lastVisitCityDetail = result
+    userContext.lastVisitCity = city
     await storage.saveAttributes(handlerInput.requestEnvelope, userContext)
-    const speech = `
-      楽しんできてくださいね。
-      <audio src="soundbank://soundlibrary/airport/airport_01" />
-      いってらっしゃい。
+    const speech = `楽しんできてくださいね。<audio src="soundbank://soundlibrary/airport/airport_01" />いってらっしゃい。
     `
     console.log(speech)
     return handlerInput.responseBuilder

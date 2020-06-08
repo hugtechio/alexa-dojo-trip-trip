@@ -1,7 +1,7 @@
 {
   "interactionModel": {
     "languageModel": {
-      "invocationName": "トリップトリップ",
+      "invocationName": "妄想トリップ",
       "intents": [
         {
           "name": "AMAZON.CancelIntent",
